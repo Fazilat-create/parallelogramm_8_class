@@ -3,691 +3,1198 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Актуализация: параллелограмм — слайды</title>
+<title>Контрольная работа №1 · Четырёхугольники</title>
+<script>
+(function(){
+  history.pushState(null, '', location.href);
+  window.addEventListener('popstate', function(){
+    history.pushState(null, '', location.href);
+  });
+})();
+</script>
+<script>
+(function(){
+  document.addEventListener('contextmenu', function(e){ e.preventDefault(); });
+  document.addEventListener('selectstart', function(e){
+    var t = e.target;
+    if(t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+    e.preventDefault();
+  });
+  document.addEventListener('dragstart', function(e){ e.preventDefault(); });
+  document.addEventListener('keydown', function(e){
+    var k = (e.key || '').toLowerCase();
+    if(e.ctrlKey || e.metaKey){
+      if(['c','x','a','u','s','p'].indexOf(k) !== -1){ e.preventDefault(); return false; }
+      if(e.shiftKey && ['i','j','c'].indexOf(k) !== -1){ e.preventDefault(); return false; }
+    }
+    if(e.key === 'F12'){ e.preventDefault(); return false; }
+  }, true);
+  document.addEventListener('copy', function(e){ e.preventDefault(); });
+  document.addEventListener('cut', function(e){ e.preventDefault(); });
+  document.addEventListener('dblclick', function(e){
+    var t = e.target;
+    if(t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA')) return;
+    var sel = window.getSelection();
+    if(sel) sel.removeAllRanges();
+  });
+  document.addEventListener('mousedown', function(e){
+    if(e.detail > 1){ e.preventDefault(); }
+  });
+})();
+</script>
 
 <script>
-  MathJax = {
-    tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
-    svg: { fontCache: 'global' }
-  };
+MathJax = {
+  tex: {inlineMath: [['$','$'],['\\(','\\)']]},
+  svg: {fontCache: 'global'}
+};
 </script>
-<script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
 <style>
   :root{
-    --main:#3498db;
-    --dark:#2980b9;
-    --light:#eaf4fc;
-    --border:#aed6f1;
-    --bg:#f5faff;
-    --green:#27ae60;
-    --red:#e74c3c;
-    --hint-bg:#fef3c7;
-    --hint-bar:#f59e0b;
-
-    /* === МАСШТАБ ТЕКСТА === */
-    --text-scale: 1.0;
+    --orange:#ea580c;
+    --orange-dark:#c2410c;
+    --orange-light:#ffedd5;
+    --amber:#f59e0b;
+    --amber-dark:#d97706;
+    --amber-light:#fef3c7;
+    --ok:#10b981;
+    --ok-light:#d1fae5;
+    --err:#ef4444;
+    --err-light:#fee2e2;
+    --text:#1e293b;
+    --muted:#78716c;
+    --border:#fed7aa;
+    --green:#16a34a;
+    --blue:#2563eb;
+    --blue-light:#dbeafe;
+    --purple:#7c3aed;
+    --purple-light:#ede9fe;
   }
-
-  *{box-sizing:border-box;}
-
-  html,body{
-    margin:0;
-    padding:0;
-    scroll-behavior:smooth;
-  }
-
+  *{box-sizing:border-box;font-family:'Segoe UI',system-ui,sans-serif;}
+  html,body{margin:0;padding:0;height:100%;overflow:hidden;}
   body{
-    font-family:"Segoe UI", "Helvetica Neue", Arial, sans-serif;
-    font-size:calc(18px * var(--text-scale));
-    background:var(--bg);
-    color:#2c3e50;
-    line-height:1.55;
+    background:
+      radial-gradient(1200px 600px at 5% -5%, #ffedd5 0%, transparent 55%),
+      radial-gradient(900px 500px at 100% 100%, #fef3c7 0%, transparent 55%),
+      #fffbf5;
+    color:var(--text);
+    height:100vh;
+    display:flex;flex-direction:column;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+  input, textarea{
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
   }
 
-  /* ---------- слайд как секция сайта ---------- */
+  header{
+    padding:8px 20px;
+    display:flex;justify-content:space-between;align-items:center;
+    background:rgba(255,251,245,.85);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+    flex-wrap:wrap;gap:8px;
+    position:relative;z-index:10;
+    flex-shrink:0;
+  }
+  .header-title{font-size:12px;font-weight:800;color:var(--orange-dark);}
+  .header-title span{color:var(--muted);font-weight:600;margin-left:6px;}
+  .header-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+
+  #timer{
+    display:flex;align-items:center;gap:6px;
+    background:#fff;border:2px solid var(--border);
+    padding:3px 12px;border-radius:12px;
+    font-weight:800;font-size:13px;
+    color:var(--orange-dark);
+    font-variant-numeric:tabular-nums;
+  }
+  #timer.warning{
+    background:var(--err-light);border-color:var(--err);
+    color:var(--err);animation:pulse 1s infinite;
+  }
+  @keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
+
+  .ref-open-btn{
+    background:linear-gradient(135deg,var(--blue),#3b82f6);
+    color:#fff;border:none;
+    padding:6px 14px;border-radius:12px;
+    font-size:12px;font-weight:800;cursor:pointer;
+    display:inline-flex;align-items:center;gap:6px;
+    box-shadow:0 4px 12px rgba(37,99,235,.3);
+    transition:.2s;
+  }
+  .ref-open-btn:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(37,99,235,.4);}
+
+  main{
+    flex:1;padding:10px 16px 80px;
+    display:flex;justify-content:center;
+    position:relative;z-index:5;
+    overflow:hidden;min-height:0;
+  }
   .slide{
     display:none;
-    max-width:1100px;
-    margin:40px auto 120px;
-    background:#fff;
-    border-radius:14px;
-    box-shadow:0 15px 40px rgba(52,152,219,.12);
-    padding:40px 50px 50px;
-    position:relative;
-    animation:fade .35s ease;
-  }
-  .slide.active{display:block;}
-  @keyframes fade{
-    from{opacity:0; transform:translateY(10px);}
-    to{opacity:1; transform:none;}
-  }
-
-  .slide-num{
-    position:absolute; top:16px; left:24px;
-    font-size:calc(14px * var(--text-scale));
-    color:var(--border); font-weight:700;
-  }
-
-  h1{
-    font-size:calc(2rem * var(--text-scale));
-    color:var(--dark);
-    text-align:center;
-    margin:0 0 10px;
-  }
-  .subtitle{
-    text-align:center;
-    color:var(--main);
-    font-size:calc(1.1rem * var(--text-scale));
-    margin-bottom:30px;
-  }
-
-  h2{
-    font-size:calc(1.8rem * var(--text-scale));
-    color:var(--dark);
-    margin:0 0 22px;
-    padding-left:18px;
-    position:relative;
-  }
-  h2::before{
-    content:""; position:absolute; left:0; top:6px; bottom:6px;
-    width:6px; border-radius:3px; background:var(--main);
-  }
-
-  h3{
-    color:var(--main);
-    font-size:calc(1.15rem * var(--text-scale));
-    margin:0 0 8px;
-  }
-  p{
-    margin:10px 0;
-    font-size:calc(17px * var(--text-scale));
-  }
-  ul,ol{margin:10px 0 10px 22px; padding:0;}
-  li{margin:5px 0; font-size:calc(17px * var(--text-scale));}
-
-  /* ---------- сетки ---------- */
-  .grid{display:grid; gap:20px;}
-  .grid-2{grid-template-columns:1fr 1fr;}
-
-  .card{
-    background:var(--light);
+    background:#fffdf9;border-radius:16px;
+    padding:14px 22px;
+    box-shadow:0 14px 50px rgba(234,88,12,.12);
     border:1px solid var(--border);
-    border-radius:14px;
-    padding:18px 22px;
-    display:flex;
+    width:100%;max-width:1100px;
+    animation:fade .4s ease;
+    position:relative;overflow:hidden;height:100%;
     flex-direction:column;
   }
+  .slide.active{display:flex;}
+  @keyframes fade{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
 
-  details{
-    margin-top:auto;
-    background:#fff;
-    border:1px solid var(--border);
-    border-radius:10px;
-    padding:10px 16px;
-  }
-  summary{
-    cursor:pointer;
-    font-weight:600;
-    color:var(--dark);
-    outline:none;
-    font-size:calc(15px * var(--text-scale));
-  }
-  details[open] summary{margin-bottom:10px;}
-  details p{
-    font-size:calc(16px * var(--text-scale));
-    margin:6px 0;
-  }
-  details ul{
-    font-size:calc(16px * var(--text-scale));
+  .slide-header{flex-shrink:0;margin-bottom:10px;position:relative;z-index:2;text-align:center;}
+  .slide-header h2{font-size:22px;margin:0 0 3px;color:var(--orange-dark);font-weight:800;}
+  .slide-header .subtitle{color:var(--muted);font-size:13px;margin:0;line-height:1.4;}
+
+  .tasks-scroll{
+    flex:1;overflow-y:auto;padding:6px 8px 20px;
+    min-height:0;
   }
 
-  .figure{
-    display:flex; justify-content:center; align-items:center;
-    margin:12px 0;
-    background:#fff;
-    border-radius:10px;
-    padding:8px;
-  }
-  svg{max-width:100%; height:auto;}
-  .svg-label-blue{font-size:calc(15px * var(--text-scale)); fill:#2980b9; font-weight:700;}
-  .svg-label-green{font-size:calc(15px * var(--text-scale)); fill:#27ae60; font-weight:700;}
-
-  /* ---------- task-box ---------- */
   .task-box{
-    background:var(--light);
+    background:#fff;border:2px solid var(--border);border-radius:14px;
+    padding:16px 22px;margin-bottom:14px;
+    transition:.2s;
+  }
+  .task-box:hover{border-color:var(--orange);box-shadow:0 6px 20px rgba(234,88,12,.08);}
+  .task-box.optional{border-color:#c4b5fd;background:linear-gradient(180deg,#faf5ff,#fff);}
+  .task-box.optional:hover{border-color:var(--purple);box-shadow:0 6px 20px rgba(124,58,237,.1);}
+
+  .task-box .task-head{
+    display:flex;align-items:center;gap:10px;margin-bottom:10px;
+    flex-wrap:wrap;
+  }
+  .task-box .task-num{
+    display:inline-flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,var(--orange),var(--amber));
+    color:#fff;font-weight:800;font-size:15px;
+    width:34px;height:34px;border-radius:10px;
+    box-shadow:0 3px 10px rgba(234,88,12,.3);flex-shrink:0;
+  }
+  .task-box.optional .task-num{
+    background:linear-gradient(135deg,var(--purple),#a78bfa);
+    box-shadow:0 3px 10px rgba(124,58,237,.3);
+  }
+  .task-box .task-tag{
+    background:var(--amber-light);color:var(--amber-dark);
+    padding:3px 10px;border-radius:10px;
+    font-size:11px;font-weight:800;
+    border:1px solid rgba(245,158,11,.3);
+  }
+  .task-box.optional .task-tag{
+    background:var(--purple-light);color:var(--purple);
+    border-color:rgba(124,58,237,.3);
+  }
+
+  .task-box .figure-tag{
+    background:linear-gradient(135deg,#dbeafe,#eff6ff);
+    color:var(--blue);
+    padding:3px 10px;border-radius:10px;
+    font-size:11px;font-weight:800;
+    border:1px solid #bfdbfe;
+    display:inline-flex;align-items:center;gap:5px;
+  }
+  .task-box.optional .figure-tag{
+    background:linear-gradient(135deg,#ede9fe,#faf5ff);
+    color:var(--purple);
+    border-color:#ddd6fe;
+  }
+
+  .task-box .task-text{
+    font-size:17px;font-weight:600;line-height:1.65;color:var(--text);
+    margin-bottom:12px;
+  }
+  .task-box .task-text b{color:var(--orange-dark);}
+  .task-box.optional .task-text b{color:var(--purple);}
+
+  .answer-row{
+    display:flex;flex-wrap:wrap;align-items:center;gap:10px;
+    background:#fffbf5;border:2px dashed var(--border);border-radius:10px;
+    padding:10px 14px;
+  }
+  .task-box.optional .answer-row{background:#faf5ff;border-color:#c4b5fd;}
+  .answer-row .label{
+    font-size:14px;font-weight:700;color:var(--orange-dark);
+  }
+  .task-box.optional .answer-row .label{color:var(--purple);}
+  .answer-row input{
+    background:#fff;border:2px solid var(--border);border-radius:8px;
+    padding:8px 12px;font-size:15px;font-weight:700;
+    color:var(--text);width:120px;outline:none;
+    font-family:inherit;
+  }
+  .answer-row input:focus{border-color:var(--orange);box-shadow:0 0 0 3px rgba(234,88,12,.15);}
+  .answer-row input.correct{border-color:var(--ok);background:var(--ok-light);color:#065f46;}
+  .answer-row input.wrong{border-color:var(--err);background:var(--err-light);color:#991b1b;}
+  .answer-row .check-btn{
+    background:linear-gradient(135deg,var(--orange),var(--amber));
+    color:#fff;border:none;padding:8px 16px;border-radius:8px;
+    font-size:13px;font-weight:800;cursor:pointer;
+    transition:.2s;
+  }
+  .answer-row .check-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(234,88,12,.3);}
+  .task-box.optional .answer-row .check-btn{
+    background:linear-gradient(135deg,var(--purple),#a78bfa);
+  }
+  .answer-row .result{
+    font-size:18px;font-weight:800;min-width:26px;text-align:center;
+  }
+  .answer-row .result.ok{color:var(--ok);}
+  .answer-row .result.err{color:var(--err);}
+
+  /* План доказательства */
+  .proof-plan{
+    background:#faf5ff;border:2px dashed #c4b5fd;border-radius:12px;
+    padding:14px 18px;margin-top:6px;
+  }
+  .proof-plan .plan-title{
+    font-size:14px;font-weight:800;color:var(--purple);
+    margin-bottom:10px;display:flex;align-items:center;gap:8px;
+  }
+  .proof-plan .plan-step{
+    display:flex;align-items:flex-start;gap:10px;
+    padding:8px 0;border-bottom:1px dashed #ddd6fe;
+    cursor:pointer;transition:.15s;
+  }
+  .proof-plan .plan-step:last-child{border-bottom:none;}
+  .proof-plan .plan-step:hover{background:rgba(196,181,253,.1);border-radius:6px;padding-left:6px;padding-right:6px;}
+  .proof-plan .plan-step input[type="checkbox"]{
+    width:19px;height:19px;margin:0;cursor:pointer;flex-shrink:0;
+    accent-color:var(--purple);margin-top:2px;
+  }
+  .proof-plan .plan-step .step-text{
+    font-size:14px;line-height:1.6;color:var(--text);flex:1;
+  }
+  .proof-plan .plan-step .step-num{
+    display:inline-flex;align-items:center;justify-content:center;
+    background:var(--purple-light);color:var(--purple);
+    font-weight:800;font-size:11px;
+    width:22px;height:22px;border-radius:6px;flex-shrink:0;
+    margin-right:6px;
+  }
+  .proof-plan .plan-step.done .step-text{color:#5b21b6;text-decoration:line-through;opacity:.75;}
+  .proof-plan .plan-note{
+    margin-top:10px;padding:8px 12px;
+    background:#fff;border-left:3px solid var(--purple);
+    border-radius:6px;font-size:12.5px;color:#5b21b6;line-height:1.55;
+    font-style:italic;
+  }
+
+  /* Модальное окно справочника */
+  .modal-overlay{
+    position:fixed;inset:0;
+    background:rgba(30,20,10,.75);
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    z-index:10000;display:none;
+    align-items:center;justify-content:center;padding:20px;
+    animation:fadeOverlay .3s ease;
+  }
+  .modal-overlay.show{display:flex;}
+  @keyframes fadeOverlay{from{opacity:0;}to{opacity:1;}}
+
+  .modal-card{
+    background:linear-gradient(180deg,#fffdf9,#fff7ed);
+    border:3px solid var(--blue);border-radius:22px;
+    width:100%;max-width:1100px;height:90vh;
+    display:flex;flex-direction:column;
+    box-shadow:0 30px 80px rgba(37,99,235,.35);
+    animation:popIn .35s cubic-bezier(.2,.9,.3,1.2);
+    overflow:hidden;
+  }
+  @keyframes popIn{from{opacity:0;transform:scale(.94);}to{opacity:1;transform:scale(1);}}
+
+  .modal-head{
+    padding:16px 24px;
+    background:linear-gradient(135deg,#dbeafe,#eff6ff);
+    border-bottom:2px solid #bfdbfe;
+    display:flex;justify-content:space-between;align-items:center;
+    flex-shrink:0;
+  }
+  .modal-head h3{
+    margin:0;font-size:20px;color:var(--blue);
+    font-weight:800;display:flex;align-items:center;gap:10px;
+  }
+  .modal-head .close-btn{
+    background:#fff;color:var(--blue);border:2px solid var(--blue);
+    padding:7px 16px;border-radius:10px;
+    font-size:13px;font-weight:800;cursor:pointer;
+    transition:.2s;
+  }
+  .modal-head .close-btn:hover{background:var(--blue);color:#fff;}
+
+  .modal-body{
+    flex:1;overflow-y:auto;padding:20px 26px;
+  }
+
+  .ref-section{
+    background:#fff;border:2px solid #bfdbfe;border-radius:14px;
+    padding:16px 20px;margin-bottom:14px;
+  }
+  .ref-section h4{
+    margin:0 0 10px;font-size:17px;color:var(--blue);
+    font-weight:800;display:flex;align-items:center;gap:8px;
+    padding-bottom:8px;border-bottom:2px dashed #bfdbfe;
+  }
+  .ref-section .prop-grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:14px;
+  }
+  .ref-section .prop-block{
+    background:#f8fafc;border-radius:10px;padding:10px 14px;
+    border-left:4px solid var(--blue);
+  }
+  .ref-section .prop-block .title{
+    font-size:13px;font-weight:800;color:var(--blue);
+    margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px;
+  }
+  .ref-section ul{margin:0;padding-left:20px;font-size:14px;line-height:1.75;}
+  .ref-section li{margin-bottom:3px;}
+  .ref-section .formula{
+    background:#fffbeb;border:1px solid #fde68a;border-radius:8px;
+    padding:6px 12px;margin:5px 0;font-size:14px;
+  }
+
+  /* Титул */
+  .title-slide{
+    flex:1;display:flex;flex-direction:column;align-items:center;
+    gap:14px;padding:10px 40px 20px;
+    overflow-y:auto;overflow-x:hidden;min-height:0;
+  }
+  .title-slide-inner{
+    margin:auto 0;display:flex;flex-direction:column;align-items:center;
+    gap:14px;width:100%;max-width:900px;
+  }
+  .title-slide h1{
+    font-size:30px;color:var(--orange-dark);font-weight:800;
+    margin:0;letter-spacing:-.5px;text-align:center;
+  }
+  .title-slide .subtitle-big{font-size:15px;color:var(--muted);margin:0;}
+
+  .rules-box{
+    background:linear-gradient(135deg,#fff7ed,#ffedd5);
+    border-left:5px solid var(--orange);border-radius:12px;
+    padding:18px 26px;text-align:left;
+    max-width:820px;width:100%;font-size:14.5px;line-height:1.75;
+  }
+  .rules-box b{color:var(--orange-dark);}
+  .rules-box ul{margin:8px 0;padding-left:22px;}
+  .rules-box li{padding:3px 0;}
+
+  .grade-table{
+    width:100%;max-width:820px;
+    border-collapse:collapse;margin-top:8px;
+    background:#fff;border-radius:12px;overflow:hidden;
+    box-shadow:0 4px 14px rgba(0,0,0,.06);
+  }
+  .grade-table th, .grade-table td{
+    padding:10px 12px;text-align:center;font-size:14px;
     border:1px solid var(--border);
-    border-radius:14px;
-    padding:22px 26px;
-    margin:22px 0;
   }
-  .task-head{display:flex; align-items:center; gap:14px; margin-bottom:12px;}
-  .task-num{
-    width:calc(38px * var(--text-scale));
-    height:calc(38px * var(--text-scale));
-    border-radius:50%;
-    background:var(--main); color:#fff;
-    display:flex; align-items:center; justify-content:center;
-    font-weight:700;
-    font-size:calc(18px * var(--text-scale));
-    box-shadow:0 4px 10px rgba(52,152,219,.35);
-    flex:0 0 auto;
+  .grade-table th{
+    background:linear-gradient(135deg,var(--orange-light),var(--amber-light));
+    color:var(--orange-dark);font-weight:800;
   }
-  .task-title{
-    font-weight:700;
-    color:var(--dark);
-    font-size:calc(1.15rem * var(--text-scale));
+  .grade-table td:first-child{
+    text-align:left;font-weight:700;color:var(--text);
+  }
+  .grade-table td{font-weight:700;color:var(--text);}
+
+  .honesty-box{
+    margin-top:12px;
+    background:linear-gradient(135deg,#f0fdf4,#dcfce7);
+    border-left:5px solid var(--green);border-radius:12px;
+    padding:16px 22px;text-align:left;
+    max-width:820px;width:100%;
+    font-size:14px;line-height:1.75;color:#14532d;
+  }
+  .honesty-box .arabic{
+    display:block;font-size:19px;font-weight:700;color:var(--green);
+    text-align:center;margin-bottom:8px;direction:rtl;
+    font-family:'Traditional Arabic','Amiri',serif;
+  }
+  .honesty-box b{color:#166534;}
+  .honesty-box .hadith{
+    font-style:italic;color:#166534;border-left:3px solid var(--green);
+    padding-left:12px;margin-top:8px;font-size:13.5px;
   }
 
-  /* ---------- подсказки ---------- */
-  .hint{
-    background:var(--hint-bg);
-    border-left:6px solid var(--hint-bar);
-    border-radius:8px;
-    padding:12px 18px;
-    margin:16px 0;
-    font-size:calc(16px * var(--text-scale));
-  }
-  .hint b{color:#b45309;}
-
-  .answer{color:var(--green); font-weight:700;}
-
-  /* ---------- интерактивные точки (задание 12) ---------- */
-  .choice{cursor:pointer;}
-  .choice circle{transition:fill .2s, stroke .2s, r .15s;}
-  .choice:hover circle{r:11;}
-
-  /* ---------- точки D в задании 13 ---------- */
-  .point-d13 circle,
-  .point-d13 text{
-    transition:opacity .4s ease;
-  }
-
-  /* ---------- тест ---------- */
-  .quiz-item{
-    background:#fff;
-    border:1px solid var(--border);
-    border-radius:12px;
-    padding:14px 20px;
-    margin:10px 0;
-    display:flex; align-items:center; gap:16px; flex-wrap:wrap;
-  }
-  .quiz-item .q-text{
-    flex:1; min-width:240px;
-    font-weight:600;
-    font-size:calc(17px * var(--text-scale));
-  }
-  .quiz-btns{display:flex; gap:10px; flex-wrap:wrap;}
-  .quiz-btn{
-    border:2px solid var(--main);
-    background:#fff; color:var(--main);
-    border-radius:10px;
+  nav{
+    position:fixed;bottom:0;left:0;right:0;
     padding:8px 20px;
-    font-size:calc(16px * var(--text-scale));
-    font-weight:700;
-    cursor:pointer;
-    transition:all .2s;
+    background:rgba(255,251,245,.9);
+    backdrop-filter:blur(10px);
+    border-top:1px solid var(--border);
+    display:flex;justify-content:space-between;align-items:center;gap:14px;
+    z-index:100;
   }
-  .quiz-btn:hover{background:#eaf4fc;}
-  .quiz-btn.correct{background:var(--green); border-color:var(--green); color:#fff;}
-  .quiz-btn.wrong{background:var(--red); border-color:var(--red); color:#fff;}
-  .quiz-feedback{
-    flex-basis:100%;
-    font-size:calc(16px * var(--text-scale));
-    font-weight:600;
+  nav button{
+    padding:8px 18px;border:none;border-radius:8px;
+    font-size:12px;font-weight:700;cursor:pointer;
+    display:inline-flex;align-items:center;gap:5px;
   }
-  .quiz-feedback.ok{color:var(--green);}
-  .quiz-feedback.no{color:var(--red);}
+  nav .nav-prev{background:#fff;color:var(--orange);border:2px solid var(--orange);}
+  nav .nav-prev:hover:not(:disabled){background:var(--orange-light);}
+  nav .nav-next{
+    background:linear-gradient(135deg,var(--orange),var(--amber));
+    color:#fff;box-shadow:0 4px 14px rgba(234,88,12,.35);
+  }
+  nav button:disabled{opacity:.4;cursor:not-allowed;}
+  nav .nav-info{font-size:11px;font-weight:700;color:var(--muted);}
 
-  /* ---------- навигация ---------- */
-  .nav{
-    position:fixed; bottom:22px; left:50%; transform:translateX(-50%);
-    display:flex; gap:14px; z-index:100;
+  .finish-early-btn{
+    position:fixed;right:20px;bottom:60px;
+    padding:12px 24px;border:none;border-radius:26px;
+    background:linear-gradient(135deg,#16a34a,#22c55e);
+    color:#fff;font-size:14px;font-weight:800;cursor:pointer;
+    transition:.25s;box-shadow:0 8px 24px rgba(16,185,129,.4);
+    z-index:99;display:inline-flex;align-items:center;gap:8px;
   }
-  .nav button{
-    background:var(--main); color:#fff; border:none;
-    padding:12px 28px; border-radius:30px;
-    font-size:16px; font-weight:600; cursor:pointer;
-    box-shadow:0 6px 18px rgba(52,152,219,.35);
-    transition:background .2s, transform .1s;
-  }
-  .nav button:hover{background:var(--dark);}
-  .nav button:active{transform:scale(.97);}
-  .nav button:disabled{background:#c7dff0; cursor:default; box-shadow:none;}
+  .finish-early-btn:hover{transform:translateY(-3px) scale(1.03);box-shadow:0 12px 32px rgba(16,185,129,.5);}
+  .finish-early-btn.hidden{display:none;}
 
-  .counter{
-    position:fixed; top:14px; right:20px; z-index:100;
-    background:#fff; color:var(--dark);
-    border:1px solid var(--border); border-radius:20px;
-    padding:4px 16px; font-size:15px; font-weight:600;
-    box-shadow:0 4px 12px rgba(52,152,219,.15);
+  .confirm-overlay{
+    position:fixed;inset:0;background:rgba(30,20,10,.7);
+    backdrop-filter:blur(12px);z-index:9998;display:none;
+    align-items:center;justify-content:center;padding:20px;
+    animation:fadeOverlay .3s ease;
   }
+  .confirm-overlay.show{display:flex;}
 
-  /* ---------- адаптив ---------- */
-  @media (max-width:760px){
-    .slide{margin:60px 12px 130px; padding:26px 20px 34px;}
-    .grid-2{grid-template-columns:1fr;}
-    h1{font-size:1.5rem;}
-    h2{font-size:1.4rem;}
-    body{font-size:16px;}
-    .nav button{padding:10px 20px; font-size:15px;}
-    .counter{top:10px; right:10px; font-size:13px; padding:3px 12px;}
+  .confirm-card{
+    background:linear-gradient(180deg,#fffdf9,#fff7ed);
+    border:3px solid var(--amber);border-radius:24px;
+    padding:40px 44px;max-width:560px;width:100%;
+    text-align:center;box-shadow:0 30px 80px rgba(245,158,11,.35);
+    animation:popIn .4s cubic-bezier(.2,.9,.3,1.2);
   }
+  .confirm-card .big-icon{font-size:70px;margin-bottom:10px;display:block;animation:wobble 2s infinite;}
+  @keyframes wobble{0%,100%{transform:rotate(-4deg);}50%{transform:rotate(4deg);}}
+  .confirm-card h2{font-size:26px;color:var(--orange-dark);margin:0 0 10px;font-weight:800;}
+  .confirm-card .joke{font-size:15px;color:var(--muted);line-height:1.6;margin:0 0 24px;padding:0 10px;}
+  .confirm-card .joke b{color:var(--orange-dark);}
+  .confirm-card .checklist-mini{
+    background:#fff;border:2px dashed var(--border);border-radius:14px;
+    padding:14px 20px;text-align:left;font-size:14px;line-height:1.7;
+    margin-bottom:22px;color:var(--text);
+  }
+  .confirm-card .checklist-mini .item{display:flex;align-items:flex-start;gap:10px;padding:4px 0;}
+  .confirm-card .checklist-mini .item .mark{color:var(--amber-dark);font-weight:800;flex-shrink:0;}
+  .confirm-card .actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+  .confirm-card .actions button{
+    padding:14px 26px;border:none;border-radius:14px;
+    font-size:14px;font-weight:800;cursor:pointer;transition:.2s;
+    display:inline-flex;align-items:center;gap:8px;
+  }
+  .confirm-card .actions .btn-yes{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff;box-shadow:0 6px 20px rgba(16,185,129,.35);}
+  .confirm-card .actions .btn-yes:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(16,185,129,.5);}
+  .confirm-card .actions .btn-no{background:#fff;color:var(--orange-dark);border:2px solid var(--orange);}
+  .confirm-card .actions .btn-no:hover{background:var(--orange-light);transform:translateY(-2px);}
+
+  .time-over-overlay{
+    position:fixed;inset:0;background:rgba(30,20,10,.75);
+    backdrop-filter:blur(14px);z-index:9999;display:none;
+    align-items:center;justify-content:center;padding:20px;
+    animation:fadeOverlay .5s ease;
+  }
+  .time-over-overlay.show{display:flex;}
+  .time-over-card{
+    background:linear-gradient(180deg,#fffdf9,#fff7ed);
+    border:3px solid var(--orange);border-radius:24px;
+    padding:44px 48px;max-width:640px;width:100%;
+    text-align:center;box-shadow:0 30px 80px rgba(234,88,12,.35);
+    animation:popIn .5s cubic-bezier(.2,.9,.3,1.2);
+  }
+  .time-over-card .big-icon{font-size:64px;margin-bottom:12px;display:block;animation:pulseIcon 2s infinite;}
+  @keyframes pulseIcon{0%,100%{transform:scale(1);}50%{transform:scale(1.08);}}
+  .time-over-card h2{font-size:30px;color:var(--orange-dark);margin:0 0 12px;font-weight:800;}
+  .time-over-card .subtitle-over{font-size:15px;color:var(--muted);margin:0 0 24px;line-height:1.5;}
+  .time-over-card .instructions{
+    background:#fff;border:2px solid var(--border);border-radius:14px;
+    padding:20px 24px;text-align:left;font-size:15px;line-height:1.7;
+    margin-bottom:20px;
+  }
+  .time-over-card .instructions .step{display:flex;gap:12px;padding:8px 0;align-items:flex-start;}
+  .time-over-card .instructions .step .num{
+    display:inline-flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,var(--orange),var(--amber));
+    color:#fff;font-weight:800;font-size:13px;
+    width:26px;height:26px;border-radius:50%;flex-shrink:0;
+    box-shadow:0 3px 10px rgba(234,88,12,.3);
+  }
+  .time-over-card .instructions .step .text{flex:1;color:var(--text);}
+  .time-over-card .instructions .step .text b{color:var(--orange-dark);}
+  .time-over-card .brand-tag{
+    display:inline-block;
+    background:linear-gradient(135deg,var(--orange),var(--amber));
+    color:#fff;padding:8px 20px;border-radius:20px;
+    font-size:14px;font-weight:800;letter-spacing:.3px;
+    box-shadow:0 6px 18px rgba(234,88,12,.3);
+  }
+  .teacher-reset{
+    display:block;margin:20px auto 0;background:transparent;border:none;
+    color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;
+    padding:6px 12px;border-radius:8px;transition:.2s;opacity:.5;
+  }
+  .teacher-reset:hover{opacity:1;background:rgba(0,0,0,.05);}
 </style>
 </head>
 <body>
 
-<div class="counter" id="counter">1 / 6</div>
-
-<!-- ================= СЛАЙД 1. Титул ================= -->
-<section class="slide active" data-num="1">
-  <span class="slide-num">Слайд 1</span>
-  <h1>Актуализация: параллелограмм</h1>
-  <p class="subtitle">Вопросы и построения · 8 класс</p>
-
-  <div class="grid grid-2">
-    <div class="card">
-      <h3>Сначала — вопросы</h3>
-      <p>Вспоминаем определение, свойства и признаки параллелограмма.</p>
-    </div>
-    <div class="card">
-      <h3>Потом — построения</h3>
-      <p>Строим четвёртую вершину параллелограмма на клетчатой бумаге.</p>
-    </div>
+<header id="mainHeader">
+  <div class="header-title">Контрольная работа №1 <span>· Четырёхугольники · 8 класс</span></div>
+  <div class="header-tools">
+    <button class="ref-open-btn" onclick="openRef()">📚 Справочник</button>
+    <div id="timer">⏱ 45:00</div>
   </div>
+</header>
 
-  <div class="hint" style="margin-top:26px;">
-    <b>Навигация:</b> кнопки внизу или стрелки ← / → на клавиатуре.
-  </div>
-</section>
+<main id="mainContent">
 
-<!-- ================= СЛАЙД 2. Вопросы 1–4 ================= -->
-<section class="slide" data-num="2">
-  <span class="slide-num">Слайд 2</span>
-  <h2>Вопросы 1–4</h2>
+  <!-- СЛАЙД 0. ТИТУЛ -->
+  <section class="slide active">
+    <div class="title-slide">
+      <div class="title-slide-inner">
+        <span style="display:inline-block;background:var(--amber-light);color:var(--amber-dark);padding:3px 12px;border-radius:14px;font-size:11px;font-weight:700;border:1px solid rgba(245,158,11,.3);">Контрольная работа №1</span>
+        <h1>Четырёхугольники</h1>
+        <p class="subtitle-big">Геометрия · 8 класс · Вариант 1</p>
 
-  <div class="grid grid-2">
+        <div class="rules-box">
+          <b>📋 Как работать:</b>
+          <ul>
+            <li><b>Решение — в тетради.</b> Записывай «Дано», чертёж, решение с обоснованием, ответ.</li>
+            <li><b>Обоснование важнее ответа!</b> Если ответ верный, но нет ссылки на свойство или признак — балл снижается.</li>
+            <li><b>Задания 1–5</b> — обязательная часть. <b>Задания 6–8</b> — дополнительная.</li>
+            <li>Если в задании написано <b>«📐 Чертёж обязателен»</b> — без чертежа решение не будет засчитано полностью.</li>
+            <li>Если забыл формулировку — открой <b>📚 Справочник</b> в шапке.</li>
+            <li>Числовые ответы можно сверить: введи ответ и нажми <b>«Проверить»</b>. Появится ✅ или ❌.</li>
+          </ul>
+        </div>
 
-    <div class="card">
-      <h3>1. Определение</h3>
-      <p>Какую фигуру называют параллелограммом? Как образовалось данное слово?</p>
-      <details><summary>Ответ</summary>
-        <p>Четырёхугольник, у которого противоположные стороны попарно параллельны.
-           Слово — от греч. «параллелос» (идущий рядом) + «грамма» (линия).</p>
-      </details>
-    </div>
+        <table class="grade-table">
+          <tr>
+            <th>Оценка</th>
+            <th>«3»</th>
+            <th>«4»</th>
+            <th>«5»</th>
+          </tr>
+          <tr>
+            <td>Обязательная часть</td>
+            <td>4 задания</td>
+            <td>5 заданий</td>
+            <td>5 заданий</td>
+          </tr>
+          <tr>
+            <td>Дополнительная часть</td>
+            <td>—</td>
+            <td>1 задание</td>
+            <td>2 задания</td>
+          </tr>
+        </table>
 
-    <div class="card">
-      <h3>2. Форма листа</h3>
-      <p>Имеет ли лист бумаги форму параллелограмма?</p>
-      <details><summary>Ответ</summary>
-        <p>Обычный лист — прямоугольник, а прямоугольник — частный случай параллелограмма. Значит, да.</p>
-      </details>
-    </div>
-
-    <div class="card">
-      <h3>3. Сумма двух углов</h3>
-      <p>Верно ли, что сумма двух углов параллелограмма равна развёрнутому углу?</p>
-      <div class="figure">
-        <svg width="180" height="120" viewBox="0 0 180 120">
-          <polygon points="20,100 140,100 160,20 40,20" fill="#eaf4fc" stroke="#2980b9" stroke-width="2"/>
-          <text x="8" y="112" class="svg-label-blue">A</text>
-          <text x="142" y="112" class="svg-label-blue">B</text>
-          <text x="162" y="18" class="svg-label-blue">C</text>
-          <text x="28" y="18" class="svg-label-blue">D</text>
-        </svg>
+        <div class="honesty-box">
+          <span class="arabic">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</span>
+          <b>🕌 Честность — часть имана.</b> Списывать нельзя: ни у соседа, ни из интернета, ни у нейросети.
+          Пророк ﷺ сказал: <b>«Кто обманывает нас, тот не из нас»</b> (Муслим).
+          <div class="hadith">
+            Решай сам — даже если ошибаешься. Честно полученная оценка лучше, чем высокая, но заработанная обманом.
+          </div>
+        </div>
       </div>
-      <details><summary>Ответ</summary>
-        <p>Не всегда: сумма <i>соседних</i> углов равна \(180^\circ\), а <i>противоположных</i> — нет.</p>
-      </details>
+    </div>
+  </section>
+
+  <!-- СЛАЙД 1. ВСЕ ЗАДАНИЯ -->
+  <section class="slide">
+    <div class="slide-header">
+      <h2>Задания</h2>
+      <p class="subtitle">Прокрути вниз. Решение — в тетради.</p>
     </div>
 
-    <div class="card">
-      <h3>4. Диагональ и треугольники</h3>
-      <p>Верно ли, что диагональ разбивает параллелограмм на два равных треугольника?</p>
-      <div class="figure">
-        <svg width="200" height="120" viewBox="0 0 200 120">
-          <polygon points="20,100 150,100 180,20 50,20" fill="#eaf4fc" stroke="#2980b9" stroke-width="2"/>
-          <line x1="20" y1="100" x2="180" y2="20" stroke="#e74c3c" stroke-width="2"/>
-          <text x="8" y="112" class="svg-label-blue">A</text>
-          <text x="152" y="112" class="svg-label-blue">B</text>
-          <text x="182" y="18" class="svg-label-blue">C</text>
-          <text x="38" y="18" class="svg-label-blue">D</text>
-        </svg>
+    <div class="tasks-scroll">
+
+      <!-- №1 -->
+      <div class="task-box">
+        <div class="task-head">
+          <span class="task-num">1</span>
+          <span class="task-tag">Обязательная часть</span>
+        </div>
+        <div class="task-text">
+          Найдите угол правильного двенадцатиугольника.
+        </div>
+        <div class="answer-row">
+          <span class="label">Ответ:</span>
+          <input type="text" id="q1" placeholder="°" autocomplete="off">
+          <button class="check-btn" onclick="checkNum('q1', 150)">Проверить</button>
+          <span class="result" id="q1-r"></span>
+        </div>
       </div>
-      <details><summary>Ответ</summary>
-        <p>Да. \(ABC = CDA\) по трём сторонам.</p>
-      </details>
-    </div>
 
-  </div>
-</section>
-
-<!-- ================= СЛАЙД 3. Вопросы 5–8 ================= -->
-<section class="slide" data-num="3">
-  <span class="slide-num">Слайд 3</span>
-  <h2>Вопросы 5–8</h2>
-
-  <div class="grid grid-2">
-
-    <div class="card">
-      <h3>5. Склейка треугольников</h3>
-      <p>Два равных треугольника склеили по одной стороне. Будет ли четырёхугольник параллелограммом?</p>
-      <div class="figure">
-        <svg width="200" height="120" viewBox="0 0 200 120">
-          <polygon points="30,100 170,100 100,20" fill="#eaf4fc" stroke="#2980b9" stroke-width="2"/>
-          <polygon points="30,100 170,100 100,180" fill="#dff0fb" stroke="#2980b9" stroke-width="2"/>
-        </svg>
+      <!-- №2 -->
+      <div class="task-box">
+        <div class="task-head">
+          <span class="task-num">2</span>
+          <span class="task-tag">Обязательная часть</span>
+        </div>
+        <div class="task-text">
+          Сумма диагоналей прямоугольника равна 17 см. Найдите диагонали прямоугольника.
+        </div>
+        <div class="answer-row">
+          <span class="label">Каждая диагональ =</span>
+          <input type="text" id="q2" placeholder="см" autocomplete="off">
+          <button class="check-btn" onclick="checkNum('q2', 8.5)">Проверить</button>
+          <span class="result" id="q2-r"></span>
+        </div>
       </div>
-      <details><summary>Ответ</summary>
-        <p>Да, если склеивать по соответственным сторонам.</p>
-      </details>
-    </div>
 
-    <div class="card">
-      <h3>6. Стороны: свойство и признак</h3>
-      <p>Каким свойством обладают стороны? Какой признак соответствует?</p>
-      <details><summary>Ответ</summary>
-        <p><b>Свойство:</b> противоположные стороны равны.<br>
-           <b>Признак:</b> если противоположные стороны попарно равны — параллелограмм.</p>
-      </details>
-    </div>
-
-    <div class="card">
-      <h3>7. Углы: свойство и признак</h3>
-      <p>Каким свойством обладают углы? Какой признак соответствует?</p>
-      <details><summary>Ответ</summary>
-        <p><b>Свойство:</b> противоположные углы равны.<br>
-           <b>Признак:</b> если противоположные углы попарно равны — параллелограмм.</p>
-      </details>
-    </div>
-
-    <div class="card">
-      <h3>8. Диагонали: свойство и признак</h3>
-      <p>Каким свойством обладают диагонали? Какой признак соответствует?</p>
-      <div class="figure">
-        <svg width="200" height="120" viewBox="0 0 200 120">
-          <polygon points="20,100 150,100 180,20 50,20" fill="#eaf4fc" stroke="#2980b9" stroke-width="2"/>
-          <line x1="20" y1="100" x2="180" y2="20" stroke="#3498db" stroke-width="2" stroke-dasharray="5 4"/>
-          <line x1="150" y1="100" x2="50" y2="20" stroke="#3498db" stroke-width="2" stroke-dasharray="5 4"/>
-          <circle cx="100" cy="60" r="4" fill="#e74c3c"/>
-          <text x="108" y="58" class="svg-label-blue">O</text>
-        </svg>
+      <!-- №3 — с чертежом -->
+      <div class="task-box">
+        <div class="task-head">
+          <span class="task-num">3</span>
+          <span class="task-tag">Обязательная часть</span>
+          <span class="figure-tag">📐 Чертёж обязателен</span>
+        </div>
+        <div class="task-text">
+          Найдите стороны параллелограмма, если две его стороны относятся как $4 : 5$, а периметр равен 72 см.
+        </div>
+        <div class="answer-row">
+          <span class="label">Меньшая сторона =</span>
+          <input type="text" id="q3a" placeholder="см" autocomplete="off">
+          <span class="label" style="margin-left:10px;">Большая сторона =</span>
+          <input type="text" id="q3b" placeholder="см" autocomplete="off">
+          <button class="check-btn" onclick="checkPair('q3a','q3b', 16, 20, 'q3-r')">Проверить</button>
+          <span class="result" id="q3-r"></span>
+        </div>
       </div>
-      <details><summary>Ответ</summary>
-        <p><b>Свойство:</b> диагонали делятся пополам.<br>
-           <b>Признак:</b> если диагонали делятся пополам — параллелограмм.</p>
-      </details>
-    </div>
 
-  </div>
-</section>
-
-<!-- ================= СЛАЙД 4. Вопросы 9–11 ================= -->
-<section class="slide" data-num="4">
-  <span class="slide-num">Слайд 4</span>
-  <h2>Вопросы 9–11</h2>
-
-  <div class="grid grid-2">
-    <div class="card">
-      <h3>9. Ловушка: две стороны</h3>
-      <p>У четырёхугольника две стороны равны, а две другие параллельны. Это параллелограмм?</p>
-      <details><summary>Ответ</summary>
-        <p>Не всегда. Например, равнобедренная трапеция. Нужны <i>противоположные</i> равные и параллельные стороны.</p>
-      </details>
-    </div>
-
-    <div class="card">
-      <h3>10. Диагонали и 4 треугольника</h3>
-      <p>Верно ли, что диагонали разбивают параллелограмм на четыре равных треугольника?</p>
-      <details><summary>Ответ</summary>
-        <p>Нет. На 4 треугольника равной площади — да, но не равных между собой.</p>
-      </details>
-    </div>
-  </div>
-
-  <div class="card" style="margin-top:20px;">
-    <h3>11. Обратное утверждение</h3>
-    <p>Приведите свойство параллелограмма, для которого обратное утверждение неверно.</p>
-    <details><summary>Ответ</summary>
-      <p>«В параллелограмме диагонали равны» — как свойство неверно (это свойство прямоугольника).
-         Обратное: «если диагонали равны, то это параллелограмм» — тоже неверно (равнобедренная трапеция).</p>
-    </details>
-  </div>
-</section>
-
-<!-- ================= СЛАЙД 5. Задание 12 ================= -->
-<section class="slide" data-num="5">
-  <span class="slide-num">Слайд 5</span>
-  <h2>Задание 12</h2>
-
-  <div class="task-box">
-    <div class="task-head">
-      <div class="task-num">12</div>
-      <div class="task-title">Найди четвёртую вершину \(D\)</div>
-    </div>
-    <p>На клетчатой бумаге отмечены три точки. Выбери четвёртую так, чтобы получился параллелограмм.</p>
-
-    <div class="figure">
-      <svg width="560" height="360" viewBox="0 0 420 270" id="grid12">
-        <rect x="0" y="0" width="420" height="270" fill="#ffffff"/>
-        <defs>
-          <pattern id="grid12p" width="30" height="30" patternUnits="userSpaceOnUse"
-                   x="30" y="20">
-            <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#b8d4e8" stroke-width="1.4"/>
-          </pattern>
-        </defs>
-        <rect x="30" y="20" width="360" height="240" fill="url(#grid12p)" stroke="#8fbcd9" stroke-width="1.6"/>
-
-        <circle cx="90"  cy="200" r="6" fill="#2980b9"/>
-        <text x="76"  y="222" class="svg-label-blue">A</text>
-        <circle cx="150" cy="200" r="6" fill="#2980b9"/>
-        <text x="156" y="222" class="svg-label-blue">B</text>
-        <circle cx="270" cy="110" r="6" fill="#2980b9"/>
-        <text x="278" y="106" class="svg-label-blue">C</text>
-
-        <g class="choice" data-correct="false">
-          <circle cx="210" cy="20"  r="7" fill="#f5b041" stroke="#e67e22" stroke-width="2"/>
-          <text x="220" y="16"  style="font-size:13px; fill:#e67e22; font-weight:700;">1</text>
-        </g>
-        <g class="choice" data-correct="true">
-          <circle cx="210" cy="110" r="7" fill="#f5b041" stroke="#e67e22" stroke-width="2"/>
-          <text x="220" y="106" style="font-size:13px; fill:#e67e22; font-weight:700;">2</text>
-        </g>
-        <g class="choice" data-correct="false">
-          <circle cx="210" cy="200" r="7" fill="#f5b041" stroke="#e67e22" stroke-width="2"/>
-          <text x="220" y="196" style="font-size:13px; fill:#e67e22; font-weight:700;">3</text>
-        </g>
-        <g class="choice" data-correct="true">
-          <circle cx="330" cy="110" r="7" fill="#f5b041" stroke="#e67e22" stroke-width="2"/>
-          <text x="340" y="106" style="font-size:13px; fill:#e67e22; font-weight:700;">4</text>
-        </g>
-      </svg>
-    </div>
-
-    <div class="hint" id="fb12" style="display:none;"></div>
-
-    <details>
-      <summary>Показать ответ и рассуждение</summary>
-      <p>Четвёртую вершину можно поставить <b>двумя способами</b>:</p>
-      <ul>
-        <li><b>Точка №2</b> — порядок вершин \(A, B, C, D_2\):<br>
-            \(D_2 = A + \vec{BC}\). Сдвиг \(B \to C\): 4 вправо, 3 вниз. Тот же сдвиг из \(A\) даёт \((6;\ 3)\).</li>
-        <li><b>Точка №4</b> — порядок вершин \(A, B, D_4, C\):<br>
-            \(D_4 = B + C - A\) (вершина, противоположная \(A\)).</li>
-      </ul>
-      <p class="answer">Ответ: точки 2 и 4.</p>
-    </details>
-  </div>
-</section>
-
-<!-- ================= СЛАЙД 6. Задание 13 ================= -->
-<section class="slide" data-num="6">
-  <span class="slide-num">Слайд 6</span>
-  <h2>Задание 13</h2>
-
-  <div class="task-box">
-    <div class="task-head">
-      <div class="task-num">13</div>
-      <div class="task-title">Сколько всего таких точек?</div>
-    </div>
-    <p>Даны три точки. Сколько существует способов достроить их до параллелограмма?</p>
-
-    <div class="figure">
-      <svg width="560" height="360" viewBox="0 0 420 270" id="grid13">
-        <rect x="0" y="0" width="420" height="270" fill="#ffffff"/>
-        <defs>
-          <pattern id="grid13p" width="30" height="30" patternUnits="userSpaceOnUse"
-                   x="30" y="20">
-            <path d="M 30 0 L 0 0 0 30" fill="none" stroke="#b8d4e8" stroke-width="1.4"/>
-          </pattern>
-        </defs>
-        <rect x="30" y="20" width="360" height="240" fill="url(#grid13p)" stroke="#8fbcd9" stroke-width="1.6"/>
-
-        <!-- данные точки A, B, C -->
-        <circle cx="150" cy="170" r="6" fill="#2980b9"/>
-        <text x="136" y="192" class="svg-label-blue">A</text>
-        <circle cx="210" cy="110" r="6" fill="#2980b9"/>
-        <text x="196" y="104" class="svg-label-blue">B</text>
-        <circle cx="270" cy="170" r="6" fill="#2980b9"/>
-        <text x="278" y="192" class="svg-label-blue">C</text>
-
-        <!-- Три возможные точки D (скрыты до ответа) -->
-        <g class="point-d13">
-          <circle cx="330" cy="110" r="9" fill="#27ae60" stroke="#1e8449" stroke-width="2.5" opacity="0"/>
-          <text x="343" y="116" class="svg-label-green" opacity="0">D₁</text>
-        </g>
-        <g class="point-d13">
-          <circle cx="210" cy="230" r="9" fill="#27ae60" stroke="#1e8449" stroke-width="2.5" opacity="0"/>
-          <text x="223" y="236" class="svg-label-green" opacity="0">D₂</text>
-        </g>
-        <g class="point-d13">
-          <circle cx="90" cy="110" r="9" fill="#27ae60" stroke="#1e8449" stroke-width="2.5" opacity="0"/>
-          <text x="103" y="116" class="svg-label-green" opacity="0">D₃</text>
-        </g>
-      </svg>
-    </div>
-
-    <div class="quiz-item" data-correct="true" style="margin-top:12px;">
-      <div class="q-text">Сколько всего таких точек?</div>
-      <div class="quiz-btns">
-        <button class="quiz-btn" data-ans="false">1</button>
-        <button class="quiz-btn" data-ans="false">2</button>
-        <button class="quiz-btn" data-ans="true">3</button>
-        <button class="quiz-btn" data-ans="false">6</button>
+      <!-- №4 — с чертежом -->
+      <div class="task-box">
+        <div class="task-head">
+          <span class="task-num">4</span>
+          <span class="task-tag">Обязательная часть</span>
+          <span class="figure-tag">📐 Чертёж обязателен</span>
+        </div>
+        <div class="task-text">
+          В ромбе одна из диагоналей равна его стороне. Найдите углы ромба.
+        </div>
+        <div class="answer-row">
+          <span class="label">Меньший угол =</span>
+          <input type="text" id="q4a" placeholder="°" autocomplete="off">
+          <span class="label" style="margin-left:10px;">Больший угол =</span>
+          <input type="text" id="q4b" placeholder="°" autocomplete="off">
+          <button class="check-btn" onclick="checkPair('q4a','q4b', 60, 120, 'q4-r')">Проверить</button>
+          <span class="result" id="q4-r"></span>
+        </div>
       </div>
-      <div class="quiz-feedback"></div>
+
+      <!-- №5 — с чертежом -->
+      <div class="task-box">
+        <div class="task-head">
+          <span class="task-num">5</span>
+          <span class="task-tag">Обязательная часть</span>
+          <span class="figure-tag">📐 Чертёж обязателен</span>
+        </div>
+        <div class="task-text">
+          Диагонали прямоугольника $CDEF$ пересекаются в точке $O$. Найдите угол между диагоналями, если $\angle CDO = 40^\circ$.
+        </div>
+        <div class="answer-row">
+          <span class="label">Угол между диагоналями =</span>
+          <input type="text" id="q5" placeholder="°" autocomplete="off">
+          <button class="check-btn" onclick="checkFlexible('q5', [80, 100])">Проверить</button>
+          <span class="result" id="q5-r"></span>
+        </div>
+      </div>
+
+      <!-- №6 (доп) — с чертежом -->
+      <div class="task-box optional">
+        <div class="task-head">
+          <span class="task-num">6</span>
+          <span class="task-tag">Дополнительная часть</span>
+          <span class="figure-tag">📐 Чертёж обязателен</span>
+        </div>
+        <div class="task-text">
+          Найдите боковую сторону равнобедренной трапеции, основания которой равны 12 см и 6 см, а один из углов равен $60^\circ$.
+        </div>
+        <div class="answer-row">
+          <span class="label">Боковая сторона =</span>
+          <input type="text" id="q6" placeholder="см" autocomplete="off">
+          <button class="check-btn" onclick="checkNum('q6', 6)">Проверить</button>
+          <span class="result" id="q6-r"></span>
+        </div>
+      </div>
+
+      <!-- №7 (доп) — с чертежом -->
+      <div class="task-box optional">
+        <div class="task-head">
+          <span class="task-num">7</span>
+          <span class="task-tag">Дополнительная часть</span>
+          <span class="figure-tag">📐 Чертёж обязателен</span>
+        </div>
+        <div class="task-text">
+          Периметр ромба равен 16 см, высота равна 2 см. Определите углы ромба.
+        </div>
+        <div class="answer-row">
+          <span class="label">Меньший угол =</span>
+          <input type="text" id="q7a" placeholder="°" autocomplete="off">
+          <span class="label" style="margin-left:10px;">Больший угол =</span>
+          <input type="text" id="q7b" placeholder="°" autocomplete="off">
+          <button class="check-btn" onclick="checkPair('q7a','q7b', 30, 150, 'q7-r')">Проверить</button>
+          <span class="result" id="q7-r"></span>
+        </div>
+      </div>
+
+      <!-- №8 (доп) — с чертежом + план -->
+      <div class="task-box optional">
+        <div class="task-head">
+          <span class="task-num">8</span>
+          <span class="task-tag">Дополнительная часть</span>
+          <span class="figure-tag">📐 Чертёж обязателен</span>
+        </div>
+        <div class="task-text">
+          На продолжении диагонали $AC$ прямоугольника $ABCD$ отложены равные отрезки $AM$ и $CN$. Докажите:
+          <br>
+          <b>а)</b> что треугольники $MAD$ и $NCB$ равны;
+          <br>
+          <b>б)</b> что четырёхугольник $MBND$ — параллелограмм.
+        </div>
+
+        <div class="proof-plan">
+          <div class="plan-title">📝 План доказательства (отмечай шаги по мере записи в тетради)</div>
+
+          <label class="plan-step" id="step1">
+            <input type="checkbox" onchange="toggleStep('step1')">
+            <span class="step-text"><span class="step-num">1</span>Рассмотреть треугольники, которые нужно сравнить.</span>
+          </label>
+
+          <label class="plan-step" id="step2">
+            <input type="checkbox" onchange="toggleStep('step2')">
+            <span class="step-text"><span class="step-num">2</span>Установить равенство нужных элементов (сторон и углов) с обоснованием.</span>
+          </label>
+
+          <label class="plan-step" id="step3">
+            <input type="checkbox" onchange="toggleStep('step3')">
+            <span class="step-text"><span class="step-num">3</span>Сделать вывод о равенстве треугольников по одному из признаков.</span>
+          </label>
+
+          <label class="plan-step" id="step4">
+            <input type="checkbox" onchange="toggleStep('step4')">
+            <span class="step-text"><span class="step-num">4</span>Из равенства треугольников получить равенство соответствующих отрезков.</span>
+          </label>
+
+          <label class="plan-step" id="step5">
+            <input type="checkbox" onchange="toggleStep('step5')">
+            <span class="step-text"><span class="step-num">5</span>Сделать вывод о виде четырёхугольника, используя признак параллелограмма.</span>
+          </label>
+
+          <div class="plan-note">
+            💡 В тетради на каждом шаге пиши <b>своё обоснование</b>: какие треугольники, какие элементы равны и почему, какой признак используешь. План — это только структура, а не готовое решение.
+          </div>
+        </div>
+      </div>
+
     </div>
+  </section>
 
-    <details>
-      <summary>Показать ответ и рассуждение</summary>
-      <p>Три способа — в зависимости от того, какая из данных точек противоположна \(D\):</p>
-      <ul>
-        <li>\(D_1 = B + C - A\); \(D_1\) противоположна \(A\);</li>
-        <li>\(D_2 = A + C - B\); \(D_2\) противоположна \(B\);</li>
-        <li>\(D_3 = A + B - C\); \(D_3\) противоположна \(C\).</li>
-      </ul>
-      <p class="answer">Ответ: 3 точки.</p>
-    </details>
+</main>
+
+<!-- МОДАЛЬНОЕ ОКНО СПРАВОЧНИКА -->
+<div class="modal-overlay" id="refOverlay">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3>📚 Справочник · Четырёхугольники</h3>
+      <button class="close-btn" onclick="closeRef()">✕ Закрыть</button>
+    </div>
+    <div class="modal-body">
+
+      <div class="ref-section">
+        <h4>🔷 Параллелограмм</h4>
+        <div class="prop-grid">
+          <div class="prop-block">
+            <div class="title">Свойства</div>
+            <ul>
+              <li>Противоположные стороны равны: $AB = CD$, $BC = AD$</li>
+              <li>Противоположные стороны параллельны</li>
+              <li>Противоположные углы равны</li>
+              <li>Сумма углов при одной стороне = $180^\circ$</li>
+              <li>Диагонали точкой пересечения делятся пополам</li>
+            </ul>
+          </div>
+          <div class="prop-block">
+            <div class="title">Признаки</div>
+            <ul>
+              <li>$AB = CD$ и $AB \parallel CD$</li>
+              <li>$AB = CD$ и $BC = AD$</li>
+              <li>Диагонали делятся пополам</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="ref-section">
+        <h4>🟦 Прямоугольник</h4>
+        <div class="prop-grid">
+          <div class="prop-block">
+            <div class="title">Свойства</div>
+            <ul>
+              <li>Все свойства параллелограмма</li>
+              <li>Все углы прямые ($90^\circ$)</li>
+              <li>Диагонали равны: $AC = BD$</li>
+            </ul>
+          </div>
+          <div class="prop-block">
+            <div class="title">Признаки</div>
+            <ul>
+              <li>Параллелограмм с прямым углом</li>
+              <li>Параллелограмм с равными диагоналями</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="ref-section">
+        <h4>🟡 Ромб</h4>
+        <div class="prop-grid">
+          <div class="prop-block">
+            <div class="title">Свойства</div>
+            <ul>
+              <li>Все свойства параллелограмма</li>
+              <li>Все стороны равны</li>
+              <li>Диагонали перпендикулярны</li>
+              <li>Диагонали — биссектрисы углов</li>
+            </ul>
+          </div>
+          <div class="prop-block">
+            <div class="title">Признаки</div>
+            <ul>
+              <li>Параллелограмм с равными сторонами</li>
+              <li>Параллелограмм с перпендикулярными диагоналями</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="ref-section">
+        <h4>🟪 Квадрат</h4>
+        <div class="prop-grid">
+          <div class="prop-block">
+            <div class="title">Свойства</div>
+            <ul>
+              <li>Все свойства прямоугольника и ромба</li>
+              <li>Все углы $90^\circ$, все стороны равны</li>
+              <li>Диагонали равны, перпендикулярны, делятся пополам</li>
+              <li>Диагонали — биссектрисы (по $45^\circ$)</li>
+            </ul>
+          </div>
+          <div class="prop-block">
+            <div class="title">Признаки</div>
+            <ul>
+              <li>Прямоугольник, который ромб</li>
+              <li>Ромб, который прямоугольник</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="ref-section">
+        <h4>🟢 Трапеция</h4>
+        <div class="prop-grid">
+          <div class="prop-block">
+            <div class="title">Общие сведения</div>
+            <ul>
+              <li>Две стороны параллельны — основания</li>
+              <li>Сумма углов при боковой стороне $180^\circ$</li>
+            </ul>
+          </div>
+          <div class="prop-block">
+            <div class="title">Равнобедренная трапеция</div>
+            <ul>
+              <li>Боковые стороны равны</li>
+              <li>Углы при каждом основании равны</li>
+              <li>Диагонали равны</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="ref-section">
+        <h4>📐 Формулы</h4>
+        <div class="prop-grid">
+          <div class="prop-block">
+            <div class="title">Угол правильного $n$-угольника</div>
+            <div class="formula">$\alpha = \dfrac{(n - 2) \cdot 180^\circ}{n}$</div>
+          </div>
+          <div class="prop-block">
+            <div class="title">Сумма углов $n$-угольника</div>
+            <div class="formula">$S = (n - 2) \cdot 180^\circ$</div>
+          </div>
+          <div class="prop-block">
+            <div class="title">Теорема Пифагора</div>
+            <div class="formula">$c^2 = a^2 + b^2$</div>
+          </div>
+          <div class="prop-block">
+            <div class="title">Признаки равенства треугольников</div>
+            <ul>
+              <li>По двум сторонам и углу между ними</li>
+              <li>По стороне и двум прилежащим углам</li>
+              <li>По трём сторонам</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
-</section>
+</div>
 
-<!-- ================= НАВИГАЦИЯ ================= -->
-<div class="nav">
-  <button id="prev">← Назад</button>
-  <button id="next">Вперёд →</button>
+<button class="finish-early-btn" id="finishEarlyBtn" onclick="askFinishEarly()">
+  ✅ Завершить работу
+</button>
+
+<nav id="mainNav">
+  <button class="nav-prev" id="navPrev" onclick="changeSlide(-1)" disabled>← Назад</button>
+  <div class="nav-info" id="navInfo">Слайд 1 из 2 · Титул</div>
+  <button class="nav-next" id="navNext" onclick="changeSlide(1)">К заданиям →</button>
+</nav>
+
+<!-- ПОДТВЕРЖДЕНИЕ -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-card">
+    <span class="big-icon">🤔</span>
+    <h2>Точно-точно закончил?</h2>
+    <p class="joke">
+      А ты <b>всё проверил</b>? Может, где-то забыл <em>свойство</em>,<br>
+      не сделал <em>чертёж</em> или не обосновал шаг? 😉
+    </p>
+    <div class="checklist-mini">
+      <div class="item"><span class="mark">✓</span> Все 8 заданий решены (или хотя бы обязательные)?</div>
+      <div class="item"><span class="mark">✓</span> Везде, где стояла метка «📐 Чертёж обязателен», есть чертёж?</div>
+      <div class="item"><span class="mark">✓</span> Каждый шаг обоснован ссылкой на свойство или признак?</div>
+      <div class="item"><span class="mark">✓</span> Ответы выделены?</div>
+      <div class="item"><span class="mark">✓</span> Тетрадь не забыл дома? 🎒</div>
+    </div>
+    <div class="actions">
+      <button class="btn-no" onclick="closeConfirm()">🔄 Ещё проверю</button>
+      <button class="btn-yes" onclick="confirmFinish()">✅ Да, я всё проверил!</button>
+    </div>
+  </div>
+</div>
+
+<!-- ФИНАЛЬНОЕ ОКНО -->
+<div class="time-over-overlay" id="timeOverOverlay">
+  <div class="time-over-card">
+    <span class="big-icon">⏰</span>
+    <h2>Работа завершена!</h2>
+    <p class="subtitle-over">Спасибо за работу — теперь осталось совсем немного.</p>
+    <div class="instructions">
+      <div class="step">
+        <span class="num">1</span>
+        <div class="text"><b>Сфотографируй свою работу</b> из тетради.<br>Убедись, что все задания видны и читаются.</div>
+      </div>
+      <div class="step">
+        <span class="num">2</span>
+        <div class="text">Открой платформу <b>Umaclass</b>.</div>
+      </div>
+      <div class="step">
+        <span class="num">3</span>
+        <div class="text">Найди блок <b>«Контрольная работа»</b>.<br>Загрузи фото в окошко для контрольной работы.</div>
+      </div>
+      <div class="step">
+        <span class="num">4</span>
+        <div class="text"><b>Отправь работу.</b> Учитель проверит и вернётся с обратной связью.</div>
+      </div>
+    </div>
+    <span class="brand-tag">📚 Umaclass · Контрольная работа</span>
+    <button class="teacher-reset" onclick="teacherReset()" title="Сбросить и начать заново (для учителя)">
+      ⟲ Сбросить для следующего ученика
+    </button>
+  </div>
 </div>
 
 <script>
-  /* ---------- навигация ---------- */
-  const slides = document.querySelectorAll('.slide');
-  const prevBtn = document.getElementById('prev');
-  const nextBtn = document.getElementById('next');
-  const counter = document.getElementById('counter');
-  let current = 0;
+var STORAGE_KEY = 'geometry_kontrolnaya_4ugolniki_v1_finished';
 
-  function showSlide(index){
-    slides.forEach((s, i) => s.classList.toggle('active', i === index));
-    current = index;
-    prevBtn.disabled = (index === 0);
-    nextBtn.disabled = (index === slides.length - 1);
-    counter.textContent = (index + 1) + ' / ' + slides.length;
-    window.scrollTo({top:0, behavior:'smooth'});
+function isFinished(){ try{ return localStorage.getItem(STORAGE_KEY) === 'true'; }catch(e){ return false; } }
+function markFinished(){ try{ localStorage.setItem(STORAGE_KEY, 'true'); }catch(e){} }
+function clearFinished(){ try{ localStorage.removeItem(STORAGE_KEY); }catch(e){} }
+
+var current = 0;
+var slides = document.querySelectorAll('.slide');
+var total = slides.length;
+var prevBtn = document.getElementById('navPrev');
+var nextBtn = document.getElementById('navNext');
+var navInfo = document.getElementById('navInfo');
+var finishEarlyBtn = document.getElementById('finishEarlyBtn');
+var confirmOverlay = document.getElementById('confirmOverlay');
+var timeOverOverlay = document.getElementById('timeOverOverlay');
+var refOverlay = document.getElementById('refOverlay');
+var finished = false;
+var timerInterval = null;
+
+function showSlide(i){
+  slides.forEach(function(s, idx){ s.classList.toggle('active', idx === i); });
+  prevBtn.disabled = (i === 0);
+  nextBtn.disabled = (i === total - 1);
+  if(i === 0){
+    navInfo.textContent = 'Слайд 1 из 2 · Титул';
+    nextBtn.textContent = 'К заданиям →';
+  } else {
+    navInfo.textContent = 'Слайд 2 из 2 · Задания';
+    nextBtn.textContent = 'В конец';
   }
+  renderMath();
+}
 
-  prevBtn.addEventListener('click', () => { if(current > 0) showSlide(current - 1); });
-  nextBtn.addEventListener('click', () => { if(current < slides.length - 1) showSlide(current + 1); });
+function changeSlide(dir){
+  if(finished) return;
+  current = Math.min(Math.max(current + dir, 0), total - 1);
+  showSlide(current);
+}
 
-  document.addEventListener('keydown', (e) => {
-    if(e.key === 'ArrowLeft' && current > 0) showSlide(current - 1);
-    if(e.key === 'ArrowRight' && current < slides.length - 1) showSlide(current + 1);
-  });
+function renderMath(){
+  if(window.MathJax && MathJax.typesetPromise){
+    MathJax.typesetPromise().catch(function(err){ console.log('MathJax error:', err); });
+  }
+}
 
+function openRef(){
+  refOverlay.classList.add('show');
+  setTimeout(renderMath, 50);
+}
+function closeRef(){
+  refOverlay.classList.remove('show');
+}
+
+function normalize(raw){
+  return (raw || '').trim().replace(',', '.').replace(/\s/g, '').replace(/см|°/g, '');
+}
+
+function checkNum(id, correct){
+  var input = document.getElementById(id);
+  var res = document.getElementById(id + '-r');
+  var val = parseFloat(normalize(input.value));
+  var ok = !isNaN(val) && Math.abs(val - correct) < 0.001;
+  if(ok){
+    input.classList.add('correct'); input.classList.remove('wrong');
+    res.textContent = '✅'; res.className = 'result ok';
+  } else {
+    input.classList.add('wrong'); input.classList.remove('correct');
+    res.textContent = '❌'; res.className = 'result err';
+  }
+}
+
+function checkFlexible(id, correctArr){
+  var input = document.getElementById(id);
+  var res = document.getElementById(id + '-r');
+  var val = parseFloat(normalize(input.value));
+  var ok = false;
+  if(!isNaN(val)){
+    for(var i = 0; i < correctArr.length; i++){
+      if(Math.abs(val - correctArr[i]) < 0.001){ ok = true; break; }
+    }
+  }
+  if(ok){
+    input.classList.add('correct'); input.classList.remove('wrong');
+    res.textContent = '✅'; res.className = 'result ok';
+  } else {
+    input.classList.add('wrong'); input.classList.remove('correct');
+    res.textContent = '❌'; res.className = 'result err';
+  }
+}
+
+function checkPair(idA, idB, correctA, correctB, resId){
+  var a = parseFloat(normalize(document.getElementById(idA).value));
+  var b = parseFloat(normalize(document.getElementById(idB).value));
+  var res = document.getElementById(resId);
+  var ok = false;
+  if(!isNaN(a) && !isNaN(b)){
+    var direct = Math.abs(a - correctA) < 0.001 && Math.abs(b - correctB) < 0.001;
+    var reversed = Math.abs(a - correctB) < 0.001 && Math.abs(b - correctA) < 0.001;
+    ok = direct || reversed;
+  }
+  if(ok){
+    res.textContent = '✅'; res.className = 'result ok';
+  } else {
+    res.textContent = '❌'; res.className = 'result err';
+  }
+}
+
+function toggleStep(id){
+  var label = document.getElementById(id);
+  var cb = label.querySelector('input');
+  label.classList.toggle('done', cb.checked);
+}
+
+function askFinishEarly(){ if(finished) return; confirmOverlay.classList.add('show'); }
+function closeConfirm(){ confirmOverlay.classList.remove('show'); }
+function confirmFinish(){ confirmOverlay.classList.remove('show'); finishWork(); }
+
+function finishWork(){
+  finished = true;
+  markFinished();
+  timeOverOverlay.classList.add('show');
+  finishEarlyBtn.classList.add('hidden');
+  document.getElementById('mainHeader').style.display = 'none';
+  document.getElementById('mainContent').style.display = 'none';
+  document.getElementById('mainNav').style.display = 'none';
+  document.body.style.overflow = 'hidden';
+  if(timerInterval){ clearInterval(timerInterval); timerInterval = null; }
+}
+
+function teacherReset(){
+  if(!confirm('Сбросить контрольную работу и начать заново?\n\nВНИМАНИЕ: это для учителя. Ученик начнёт с чистого листа.')) return;
+  clearFinished();
+  location.reload();
+}
+
+var timeLeft = 45 * 60;
+var timerEl = document.getElementById('timer');
+
+function updateTimer(){
+  if(timeLeft <= 0){
+    timerEl.textContent = '⏱ 00:00';
+    timerEl.classList.add('warning');
+    if(!finished){ finishWork(); }
+    return;
+  }
+  var m = Math.floor(timeLeft / 60);
+  var s = timeLeft % 60;
+  timerEl.textContent = '⏱ ' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+  if(timeLeft <= 300){ timerEl.classList.add('warning'); }
+  else { timerEl.classList.remove('warning'); }
+}
+
+function startTimer(){
+  timerInterval = setInterval(function(){
+    if(timeLeft > 0 && !finished){ timeLeft--; updateTimer(); }
+  }, 1000);
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  if(isFinished()){
+    finished = true;
+    finishEarlyBtn.classList.add('hidden');
+    document.getElementById('mainHeader').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'none';
+    document.getElementById('mainNav').style.display = 'none';
+    timeOverOverlay.classList.add('show');
+    return;
+  }
   showSlide(0);
-
-  /* ---------- задание 12: выбор точки ---------- */
-  document.querySelectorAll('#grid12 .choice').forEach(choice => {
-    choice.addEventListener('click', () => {
-      const grid = document.querySelector('#grid12');
-      if (grid.dataset.answered === 'true') return;
-
-      const correct = choice.dataset.correct === 'true';
-      const circle = choice.querySelector('circle');
-      const fb = document.getElementById('fb12');
-
-      if (correct) {
-        circle.setAttribute('fill', '#27ae60');
-        circle.setAttribute('stroke', '#1e8449');
-        fb.style.display = 'block';
-        fb.innerHTML = '<b>✔ Верно!</b> Эта точка даёт параллелограмм. ' +
-                       'Обрати внимание: подходят <b>две</b> точки — №2 и №4, ' +
-                       'но с разным порядком вершин.';
-        grid.dataset.answered = 'true';
-      } else {
-        circle.setAttribute('fill', '#e74c3c');
-        circle.setAttribute('stroke', '#c0392b');
-        fb.style.display = 'block';
-        fb.innerHTML = '<b>✘ Не подходит.</b> Попробуй другую точку.';
-      }
-    });
-  });
-
-  /* ---------- задание 13: показать все три точки D ---------- */
-  function showD13(){
-    document.querySelectorAll('.point-d13 circle, .point-d13 text').forEach(el => {
-      el.setAttribute('opacity', '1');
-    });
-  }
-
-  /* ---------- задание 13: тест ---------- */
-  document.querySelectorAll('.quiz-item').forEach(item => {
-    const correct = item.dataset.correct === 'true';
-    const feedback = item.querySelector('.quiz-feedback');
-    const buttons = item.querySelectorAll('.quiz-btn');
-
-    buttons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        buttons.forEach(b => b.disabled = true);
-        const userAns = btn.dataset.ans === 'true';
-
-        if (userAns === correct) {
-          btn.classList.add('correct');
-          feedback.textContent = '✔ Верно!';
-          feedback.className = 'quiz-feedback ok';
-        } else {
-          btn.classList.add('wrong');
-          buttons.forEach(b => {
-            if ((b.dataset.ans === 'true') === correct) b.classList.add('correct');
-          });
-          feedback.textContent = '✘ Неверно. Правильный ответ — 3.';
-          feedback.className = 'quiz-feedback no';
-        }
-
-        // при любом ответе — показываем точки на чертеже
-        showD13();
-      });
-    });
-  });
+  updateTimer();
+  startTimer();
+  renderMath();
+  setTimeout(renderMath, 500);
+  setTimeout(renderMath, 1500);
+});
 </script>
 
 </body>
