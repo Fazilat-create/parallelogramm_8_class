@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Актуализация знаний · Вспоминаем теорию</title>
+
+<style>
+  :root{
+    --main:#3498db;
+    --main-dark:#2980b9;
+    --main-light:#eaf4fc;
+    --bg:#f5faff;
+    --text:#1c3d2a;
+    --muted:#5a7a65;
+    --border:#aed6f1;
+    --accent:#e67e22;
+    --success:#27ae60;
+    --error:#e74c3c;
+  }
+
+  *{box-sizing:border-box;}
+
+  html, body{
+    margin:0; padding:0; height:100vh; overflow:hidden;
+    background:var(--bg); color:var(--text);
+    font-family:'Segoe UI',system-ui,sans-serif;
+    font-size:18px; line-height:1.5;
+  }
+
+  .slides-container{
+    width:100%; height:100vh;
+    display:flex; justify-content:center; align-items:center;
+    padding:16px;
+  }
+
+  .slide{
+    display:none; width:100%; max-width:1200px; height:100%;
+    max-height:calc(100vh - 32px); background:#fff;
+    border:1px solid var(--border); border-radius:20px;
+    box-shadow:0 18px 46px rgba(52,152,219,.12);
+    padding:20px 24px; flex-direction:column; position:relative;
+    animation:fade .35s ease;
+  }
+  .slide.active{display:flex;}
+  @keyframes fade{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:none;} }
+
+  .header-plate{
+    background:var(--main); color:#fff; text-align:center;
+    padding:12px 20px; border-radius:16px; margin-bottom:14px;
+    box-shadow:0 8px 20px rgba(52,152,219,.2); flex-shrink:0;
+  }
+  .header-plate h2{ margin:0 0 2px; font-size:1.35rem; font-weight:900; letter-spacing:.3px; }
+  .header-plate .subtitle{ margin:0; font-size:0.85rem; font-weight:600; opacity:.9; }
+
+  /* Сетка теории */
+  .theory-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    flex: 1;
+    min-height: 0;
+    margin-bottom: 14px;
+  }
+
+  .theory-card {
+    background: var(--main-light);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .theory-card h3 {
+    margin: 0;
+    color: var(--main-dark);
+    font-size: 1.1rem;
+    border-bottom: 2px solid var(--border);
+    padding-bottom: 8px;
+  }
+
+  .statement {
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+
+  /* Выпадающие списки (селекты) */
+  .blank-select {
+    appearance: none;
+    background: #fff;
+    border: 2px solid var(--main);
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--main-dark);
+    cursor: pointer;
+    outline: none;
+    transition: 0.2s;
+    text-align: center;
+  }
+  .blank-select:focus {
+    box-shadow: 0 0 0 3px rgba(52,152,219,0.3);
+  }
+  .blank-select.correct {
+    border-color: var(--success);
+    background: #eafaf1;
+    color: var(--success);
+  }
+  .blank-select.wrong {
+    border-color: var(--error);
+    background: #fdedec;
+    color: var(--error);
+    animation: shake 0.4s;
+  }
+
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+
+  /* Текстовые поля ввода */
+  .blank-input {
+    width: 80px;
+    padding: 4px 8px;
+    border: 2px solid var(--main);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 700;
+    text-align: center;
+    color: var(--main-dark);
+    outline: none;
+    transition: 0.2s;
+  }
+  .blank-input.correct { border-color: var(--success); background: #eafaf1; color: var(--success); }
+  .blank-input.wrong { border-color: var(--error); background: #fdedec; color: var(--error); }
+
+  /* Блок с кнопкой проверки */
+  .check-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-shrink: 0;
+    background: #fff;
+    padding: 12px 20px;
+    border-radius: 16px;
+    border: 2px solid var(--border);
+  }
+
+  .check-btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 10px 24px;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
+    transition: 0.2s;
+  }
+  .check-btn:hover { background: #d35400; }
+  .check-btn:active { transform: scale(0.98); }
+
+  .score-text {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+
+  .nav-buttons button{
+    background:var(--main); color:#fff; border:none;
+    padding:10px 24px; border-radius:24px;
+    font-size:15px; font-weight:800; cursor:pointer;
+    box-shadow:0 4px 12px rgba(52,152,219,.3);
+    transition:background .2s;
+  }
+  .nav-buttons button:hover{ background:var(--main-dark); }
+
+  @media (max-width:860px){
+    .theory-grid { grid-template-columns: 1fr; overflow-y: auto; }
+    .slide { padding:14px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="slides-container">
+
+  <!-- ================= СЛАЙД 1. Треугольники ================= -->
+  <section class="slide active">
+    <div class="header-plate">
+      <h2>Актуализация: Треугольники</h2>
+      <p class="subtitle">Вспомните правила и заполните пропуски</p>
+    </div>
+
+    <div class="theory-grid">
+      <div class="theory-card">
+        <h3>Углы треугольника</h3>
+        <div class="statement">
+          1. Сумма всех внутренних углов любого треугольника равна 
+          <select class="blank-select" id="sel1" data-correct="180">
+            <option value="">-- выберите --</option>
+            <option value="90">90°</option>
+            <option value="180">180°</option>
+            <option value="360">360°</option>
+          </select>.
+        </div>
+        <div class="statement">
+          2. Внешний угол треугольника равен 
+          <select class="blank-select" id="sel2" data-correct="sum">
+            <option value="">-- выберите --</option>
+            <option value="diff">разности двух внутренних</option>
+            <option value="sum">сумме двух внутренних, не смежных с ним</option>
+            <option value="equal">третьему внутреннему углу</option>
+          </select>.
+        </div>
+      </div>
+
+      <div class="theory-card">
+        <h3>Медиана и биссектриса</h3>
+        <div class="statement">
+          3. Медиана, проведённая к гипотенузе прямоугольного треугольника, равна 
+          <select class="blank-select" id="sel3" data-correct="half">
+            <option value="">-- выберите --</option>
+            <option value="equal">самой гипотенузе</option>
+            <option value="half">половине гипотенузы</option>
+            <option value="double">удвоенной гипотенузе</option>
+          </select>.
+        </div>
+        <div class="statement">
+          4. Биссектриса угла — это луч, который 
+          <select class="blank-select" id="sel4" data-correct="half">
+            <option value="">-- выберите --</option>
+            <option value="half">делит угол пополам</option>
+            <option value="equal">делит противоположную сторону пополам</option>
+            <option value="sum">соединяет вершину с серединой</option>
+          </select>.
+        </div>
+      </div>
+    </div>
+
+    <div class="check-area">
+      <div class="score-text" id="score1">Проверено: 0 / 4</div>
+      <button class="check-btn" onclick="checkAnswers1()">Проверить ответы</button>
+      <div class="nav-buttons">
+        <button onclick="nextSlide()">Далее → Трапеция</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= СЛАЙД 2. Трапеция ================= -->
+  <section class="slide">
+    <div class="header-plate">
+      <h2>Актуализация: Трапеция</h2>
+      <p class="subtitle">Впишите пропущенные слова или числа</p>
+    </div>
+
+    <div class="theory-grid">
+      <div class="theory-card">
+        <h3>Свойства трапеции</h3>
+        <div class="statement">
+          1. Сумма углов, прилежащих к боковой стороне трапеции, равна 
+          <input type="text" class="blank-input" id="inp1" data-correct="180" placeholder="..."> °.
+        </div>
+        <div class="statement">
+          2. В равнобедренной трапеции углы при основании 
+          <select class="blank-select" id="sel5" data-correct="equal">
+            <option value="">-- выберите --</option>
+            <option value="sum">в сумме дают 180°</option>
+            <option value="equal">равны</option>
+            <option value="diff">разные</option>
+          </select>.
+        </div>
+        <div class="statement">
+          3. Если провести две высоты из концов меньшего основания, то средний отрезок большего основания будет равен 
+          <select class="blank-select" id="sel6" data-correct="small">
+            <option value="">-- выберите --</option>
+            <option value="large">большему основанию</option>
+            <option value="small">меньшему основанию</option>
+            <option value="half">половине большего</option>
+          </select>.
+        </div>
+      </div>
+
+      <div class="theory-card">
+        <h3>Диагональ и высота</h3>
+        <div class="statement">
+          4. Диагональ равнобедренной трапеции образует с основаниями 
+          <select class="blank-select" id="sel7" data-correct="equal">
+            <option value="">-- выберите --</option>
+            <option value="equal">равные накрест лежащие углы</option>
+            <option value="sum">смежные углы</option>
+            <option value="diff">разные углы</option>
+          </select>.
+        </div>
+        <div class="statement">
+          5. Если диагональ равнобедренной трапеции образует с основанием угол 45°, то высота равна 
+          <select class="blank-select" id="sel8" data-correct="polусумма">
+            <option value="">-- выберите --</option>
+            <option value="diff">разности оснований</option>
+            <option value="polусумма">полусумме оснований</option>
+            <option value="sum">сумме оснований</option>
+          </select>.
+        </div>
+      </div>
+    </div>
+
+    <div class="check-area">
+      <div class="score-text" id="score2">Проверено: 0 / 5</div>
+      <button class="check-btn" onclick="checkAnswers2()">Проверить ответы</button>
+      <div class="nav-buttons">
+        <button onclick="prevSlide()">← Назад</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.slide');
+
+  function showSlide(index) {
+    slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
+    currentSlide = index;
+  }
+
+  function nextSlide() { if (currentSlide < slides.length - 1) showSlide(currentSlide + 1); }
+  function prevSlide() { if (currentSlide > 0) showSlide(currentSlide - 1); }
+
+  // ПРОВЕРКА 1 СЛАЙДА
+  function checkAnswers1() {
+    let score = 0;
+    const selects = ['sel1', 'sel2', 'sel3', 'sel4'];
+    
+    selects.forEach(id => {
+      const el = document.getElementById(id);
+      el.classList.remove('correct', 'wrong');
+      
+      if (el.value === el.dataset.correct) {
+        el.classList.add('correct');
+        score++;
+      } else if (el.value !== "") {
+        el.classList.add('wrong');
+      }
+    });
+
+    document.getElementById('score1').textContent = `Проверено: ${score} / 4`;
+    document.getElementById('score1').style.color = score === 4 ? 'var(--success)' : 'var(--error)';
+  }
+
+  // ПРОВЕРКА 2 СЛАЙДА
+  function checkAnswers2() {
+    let score = 0;
+
+    // Текстовое поле
+    const input1 = document.getElementById('inp1');
+    input1.classList.remove('correct', 'wrong');
+    if (input1.value.trim() === input1.dataset.correct) {
+      input1.classList.add('correct');
+      score++;
+    } else if (input1.value.trim() !== "") {
+      input1.classList.add('wrong');
+    }
+
+    // Селекты
+    const selects = ['sel5', 'sel6', 'sel7', 'sel8'];
+    selects.forEach(id => {
+      const el = document.getElementById(id);
+      el.classList.remove('correct', 'wrong');
+      
+      if (el.value === el.dataset.correct) {
+        el.classList.add('correct');
+        score++;
+      } else if (el.value !== "") {
+        el.classList.add('wrong');
+      }
+    });
+
+    document.getElementById('score2').textContent = `Проверено: ${score} / 5`;
+    document.getElementById('score2').style.color = score === 5 ? 'var(--success)' : 'var(--error)';
+  }
+</script>
+
+</body>
+</html>
